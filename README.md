@@ -44,7 +44,7 @@ Just to make sure.
 
 This should be prepended with `feature/` and be lower-case words joined with hyphens.
 
-    git co -b feature/smoking-cost-calculator
+    git checkout -b feature/smoking-cost-calculator
 
 If more than one person is working on a feature you may want to consider having personal branches taken from the feature branch (eg. `russell/smoking-cost-calculator-red-button`)
 
