@@ -72,6 +72,12 @@ If you're using hub, this can be done with `git pull-request` - otherwise in git
 
 This needs to be done by someone else on the team.
 
+The merge should be done using the `--no-ff` flag to ensure there is a merge commit.
+This marks the point at which the feature was merged into the release:
+
+    git checkout release/phase-two
+    git merge feature/smoking-cost-calculator --no-ff
+
 ### Delete both the local and remote versions of your feature branch
 
     git branch -d feature/smoking-cost-calculator
@@ -86,7 +92,9 @@ Release the release branch
 ### Merge your release branch back into master
 
     git checkout master
-    git merge release/phase-2
+    git merge release/phase-2 --no-ff
+
+Again, use the `no-ff` flag to ensure there is a merge commit.
 
 ### Delete both the local and remote versions of your release branch
 
