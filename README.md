@@ -81,7 +81,7 @@ This marks the point at which the feature was merged into the release:
 ### Delete both the local and remote versions of your feature branch
 
     git branch -d feature/smoking-cost-calculator
-    git push :feature/smoking-cost-calculator
+    git push origin :feature/smoking-cost-calculator
 
 ### Repeat until all features for the release are completed
 
@@ -99,5 +99,5 @@ Again, use the `no-ff` flag to ensure there is a merge commit.
 ### Delete both the local and remote versions of your release branch
 
     git branch -d release/phase-two
-    git push :release/phase-two
+    git push origin :release/phase-two
 
