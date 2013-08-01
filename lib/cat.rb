@@ -4,6 +4,6 @@ class Cat
   end
 
   def purr
-    "PURRRRR"
+    "PURRRRR!"
   end
 end

@@ -9,6 +9,6 @@ describe Cat do
   end
 
   it 'can purr' do
-    expect(cat.purr).to eq "PURRRRR"
+    expect(cat.purr).to eq "PURRRRR!"
   end
 end
