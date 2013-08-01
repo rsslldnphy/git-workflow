@@ -1,7 +1,14 @@
 require 'cat'
 
 describe Cat do
+
+  let (:cat) { Cat.new }
+
   it 'can talk' do
-    expect(Cat.new.talk).to eq "MIAOW!"
+    expect(cat.talk).to eq "MIAOW!"
+  end
+
+  it 'can purr' do
+    expect(cat.purr).to eq "PURRRRR"
   end
 end
