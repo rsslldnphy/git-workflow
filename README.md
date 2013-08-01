@@ -1,103 +1,81 @@
 # Git Workflow
 
-This repository is intended to document a useful workflow for git, as well as to provide something to practice on when getting used to the proposed workflow.
+This repository is intended to document a useful workflow for git.
+
+It intentionally leaves out the details of creating and maintaining release
+branches, tagging and deploying code so as to keep it simple for those more
+unfamiliar with git. The focus here is on your daily workflow of writing features.
 
 ## Overview
 
 This is a basic overview; more detail on each of the points is given below.
 
-* At the start of a project, create a release branch
-* Pick up a ticket for a feature
-* Pull the most recent changes from the release branch
-* Run specs to check they are green
-* Create a feature branch for the ticket
-* Implement the feature, making many small commits
-* Rebase your commits on top of master, squashing your commits into sensible higher level ones
-* Create a pull request for code review
-* Get the pull request code reviewed and merged
-* Delete both the local and remote versions of your feature branch
-* Repeat until all features for the release are completed
-* Release
-* Merge your release branch back into master
-* Delete both the local and remote versions of your release branch
+1. Pick up a ticket from the Kanban board
+2. Pull the latest changes from the current release branch
+3. Check out a new feature branch from the release branch
+4. Write code, commit, repeat
+5. Rebase the release branch into your feature branch
+6. Create a pull request into the release branch
+7. Have a colleague code review the feature and merge
 
-### At the start of a project, create a release branch
+#### 1. Pick up a ticket from the Kanban board
+This one is self-explanatory.
+#### 2. Pull the latest changes from the current release branch
+Make sure you are up to date:
 
-This should be prepended with `release/` and be lower-case words joined with hyphens.
+    git checkout release/name-of-release
+    git pull
+    
+#### 3. Check out a new feature branch from the release branch
 
-For example, `release/phase-two`.
+Run the following with the release branch checked out:
 
-### Pick up a ticket for a feature
+    git checkout -b feature/name-of-feature
+    
+#### 4. Write code, commit, repeat
 
-Not much needs to be said for this. Claim a ticket on the kanban board.
-For the sake of example let's say it's called "Smoking Cost Calculator".
+These commits should be small and atomic - eg. "New question for smoking cost calculator". Do this until you've finished writing the feature. 
 
-### Pull the most recent changes from master
+#### 5. Rebase the release branch into your feature branch
 
-    git fetch && git pull
+This pulls any changes that have been made to the release branch into your feature branch and applies your changes on top of them. It also gives you a chance to clean up your commit history. 
 
-### Run specs to check they are green
+Run the following with your feature branch checked out:
 
-Just to make sure.
+    git rebase release/name-of-release -i
+    
+This will open up your default editor (specified by the `GIT_EDITOR` environment variable) with a screen that will allow you to rename, reorder, and squash your commits.
 
-### Create a feature branch for the ticket
+You should squash any small commits into cohesive, higher level commits with descriptive messages. It also makes github look nicer and helps remind you to stop and think about your commit message if you start each one with an emoji to sum up the "emotional content" of the commit. See the [Emoji Cheatsheet](http://www.emoji-cheat-sheet.com).
 
-This should be prepended with `feature/` and be lower-case words joined with hyphens.
+The aim is for commits to tell a helpful story of the history of the project - and the trick is to get the messages at the right level of detail.
+    
+#### 6. Create a pull request into the release branch
 
-    git checkout -b feature/smoking-cost-calculator
+Make sure you have pushed your changes to remote (the first time you do this you will need to set upstream like this: `git push -u origin feature/name-of-feature`).
 
-If more than one person is working on a feature you may want to consider having personal branches taken from the feature branch (eg. `russell/smoking-cost-calculator-red-button`)
+If you are using Hub (`brew install hub` on a mac) you can create a pull request by running the following command with your feature branch checked out:
 
-### Implement the feature, making many small commits
+    git pull-request release/name-of-release
+    
+Otherwise you can create the pull request in github.
 
-It doesn't matter if your commits are two low level but you should avoid doing more than "one thing" in a commit. It's easy to squash commits, pulling them apart is a bit trickier.
+#### 7. Have a colleague code review the feature and merge
 
-### Rebase your commits on top of master, squashing your commits into sensible higher level ones
+Assign the pull request you have created to a colleague so they can review your code and suggest any changes. Make any changes they suggest! When you are both happy they can merge your feature into the release branch by checking out the release branch and running this command:
 
-    git rebase master -i
+    git merge feature/name-of-feature --no-ff
+    
+    
+Now pick up your next ticket!
 
-This will open your default editor which will allow you to squash/rename commits.
-You should aim for sensible, high-level commits here with useful messages.
-It's also nice to add a github emoji to sum up the emotional content of the commit :smile:
+## Glossary
 
-You can do this repeatedly if several releases go by while you're writing your feature - obviously this is not ideal.
+#### Release Branch
+This has the newest, unreleased, but stable code. It should be releasable at any time. No-one should commit directly to it. It should be named something like this: `release/name-of-release`.
 
-This avoids the git history being cluttered up with meaningless merge commits that just create noise and confusion.
+#### Feature Branch
+A temporary branch that is used by a single developer while implementing a feature. It should be named something like this: `feature/name-of-feature`.
 
-### Create a pull request into the release branch for code review
 
-If you're using hub, this can be done with `git pull-request` - otherwise in github.
-
-### Get the pull request code-reviewed and merged
-
-This needs to be done by someone else on the team.
-
-The merge should be done using the `--no-ff` flag to ensure there is a merge commit.
-This marks the point at which the feature was merged into the release:
-
-    git checkout release/phase-two
-    git merge feature/smoking-cost-calculator --no-ff
-
-### Delete both the local and remote versions of your feature branch
-
-    git branch -d feature/smoking-cost-calculator
-    git push origin :feature/smoking-cost-calculator
-
-### Repeat until all features for the release are completed
-
-### Release
-
-Release the release branch
-
-### Merge your release branch back into master
-
-    git checkout master
-    git merge release/phase-2 --no-ff
-
-Again, use the `no-ff` flag to ensure there is a merge commit.
-
-### Delete both the local and remote versions of your release branch
-
-    git branch -d release/phase-two
-    git push origin :release/phase-two
 
